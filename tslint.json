@@ -1,0 +1,14 @@
+{
+  //"extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "extends": ["tslint:latest", "tslint-react"],
+  "defaultSeverity": "warning",
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "src/**/*.png",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "files": ["src/**/*.tsx"]
+}
