@@ -1,25 +1,26 @@
 import * as React from 'react';
 import {Button, Icon, Input,} from 'semantic-ui-react';
+import UserLogsApi from '../../API/UserLogsApi';
 
 interface IState {
     phoneNumber: string;
-    parameter: string;
 }
+
 interface IProps {
-    addPhoneNumberToHistory: any;
-    addParameter: any;
+    addPhoneNumber: any;
+    getUserLogs: any;
 }
 
 const isPhoneNumber = /^((7)+([0-9]){10})$/;
 const isInteger = /^[0-9]*$/;
 
 class PhoneNumberSearch extends React.Component<IProps, IState> {
-    constructor(props: any){
+    constructor(props: any) {
         super(props);
         this.state = {
-            parameter: '',
             phoneNumber: '',
         };
+        this.getLogs = this.getLogs.bind(this);
     };
 
     handlePhoneNumberInput = ({target: {value: phoneNumber}}: any) => {
@@ -29,32 +30,28 @@ class PhoneNumberSearch extends React.Component<IProps, IState> {
             });
         }
     };
-
-    handleParametrInput = ({target: {value: parameter}}: any) => {
-        this.setState({parameter: parameter});
-    };
-
-    handleKeyboardInput = (event: any) => {
+     handleKeyboardInput = (event: any) => {
         const {phoneNumber} = this.state;
         if (event.key === 'Enter' && isPhoneNumber.test(phoneNumber)) {
-            this.props.addPhoneNumberToHistory(phoneNumber);
+            this.props.addPhoneNumber(phoneNumber);
+
             this.setState({
                 phoneNumber: '',
             });
         }
     };
-    handleKeyPress = (event: any) => {
-        const {parameter} = this.state;
-        if (event.key === 'Enter') {
-            this.props.addParameter(parameter);
-            this.setState({
-                parameter: '',
-            });
+
+    async getLogs(phoneNumber: string) {
+        try {
+            const logs = await UserLogsApi.getRegistrationLogs(phoneNumber);
+            return logs;
+        } catch (error) {
+            console.log(error);
         }
     };
 
     render() {
-        const {phoneNumber, parameter} = this.state;
+        const {phoneNumber} = this.state;
         const isButtonActive = isPhoneNumber.test(phoneNumber.toString());
         return (
             <div>
@@ -68,26 +65,14 @@ class PhoneNumberSearch extends React.Component<IProps, IState> {
                            <Button
                                disabled={!isButtonActive}
                                icon='search'
-                               onClick={() => {
+                               onClick={async () => {
+                                   const logs = await this.getLogs(this.state.phoneNumber);
+                                   this.props.getUserLogs(logs);
+                                   console.log(logs);
                                    this.setState({phoneNumber: ''});
                                }}
                            />
                        }
-                />
-                <Input
-                    value={parameter}
-                    onChange={this.handleParametrInput}
-                    onKeyPress={this.handleKeyPress}
-                    placeholder="parameter"
-                    action={
-                        <Button
-                            disabled={!isButtonActive}
-                            icon='search'
-                            onClick={() => {
-                                this.setState({parameter: ''});
-                            }}
-                        />
-                    }
                 />
             </div>
         );

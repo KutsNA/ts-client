@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {Container, Menu,} from 'semantic-ui-react';
-import PhoneNumberSearch from '../Comons/PhoneNumberSearch/PhoneNumberSearch';
-import SberKidsLogo from '../Comons/SberKidsLogo/SberKidsLogo';
-import CreateList from './CreateList';
+import {Container, Grid, Menu, Icon,} from 'semantic-ui-react';
+import PhoneNumberSearch from '../Common/PhoneNumberSearch/PhoneNumberSearch';
+import SberKidsLogo from '../Common/SberKidsLogo/SberKidsLogo';
+//import ActionScreen from "../Screens/ActionScreen";
+import ActScr from '../Screens/ActScr';
 
 /*
 import { changeCommon } from 'client/actions';
@@ -15,49 +16,80 @@ import ModificationsScreen from '../Screens/Modifications'
 */
 interface IState {
     userId: string;
-    phoneNumbersArray: Array<string>;
+    phoneNumber: string;
     parameter: string;
+    hits: any;
 };
 
 class Dashboard extends React.Component<object, IState> {
     constructor(props: any) {
         super(props);
         this.state = {
+            phoneNumber: '',
             parameter: '',
-            phoneNumbersArray: [],
             userId: '',
+            hits: [],
         };
     };
 
-    addPhoneNumberToHistory = (number: string) => {
-        let tmp = this.state.phoneNumbersArray;
-        tmp.push(number);
-        console.log('add phone number ' + tmp);
-        this.setState({phoneNumbersArray: tmp});
+    setPhoneNumber = (number: string) => {
+        this.setState({phoneNumber: number});
     };
-
-    addParameter = (parameter: string) => {
-        this.setState({parameter: parameter});
-        console.log(this.state.parameter);
+        addLogs = (logs: any) => {
+        this.setState({hits: logs} );
     };
 
     render() {
-        const {phoneNumbersArray, parameter} = this.state;
+
         return (
-            <Container fluid={true}>
-                <Menu id="menu">
-                    <Menu.Item position="left">
-                        <SberKidsLogo/>
-                    </Menu.Item>
-                    <Menu.Item position="right">
-                        <PhoneNumberSearch addPhoneNumberToHistory={this.addPhoneNumberToHistory}
-                                           addParameter={this.addParameter}/>
-                    </Menu.Item>
-                </Menu>
-                <Container>
-                    <CreateList phoneNumbersArray={phoneNumbersArray} parametr={parameter}/>
+            <div>
+                <Container fluid={true}>
+                    <Menu id="menu">
+                        <Menu.Item position="left">
+                            <SberKidsLogo/>
+                        </Menu.Item>
+                        <Menu.Item position="right">
+                            <PhoneNumberSearch addPhoneNumber={this.setPhoneNumber}
+                                               getUserLogs={this.addLogs}/>
+                        </Menu.Item>
+                    </Menu>
                 </Container>
-            </Container>
+                <Container fluid>
+                    <Grid columns={3}>
+                        <Grid.Column computer={2} tablet={2} mobile={16}>
+                            <Menu attached fluid icon="labeled" vertical>
+                                <Menu.Item name="Actions Screen">
+                                    <Icon name="tasks"/>
+                                    Действия
+                                </Menu.Item>
+                                <Menu.Item name="Registrations Screen">
+                                    <Icon name="address card"/>
+                                    Регистрация
+                                </Menu.Item>
+                                <Menu.Item name="Transactions Screen">
+                                    <Icon name="money bill alternate outline"/>
+                                    Транзакции
+                                </Menu.Item>
+                                <Menu.Item name="Modifications Screen">
+                                    <Icon name="wrench"/>
+                                    Модификации
+                                </Menu.Item>
+                            </Menu>
+                        </Grid.Column>
+                        <Grid.Column computer={12} tablet={12} mobile={16}>
+
+                            {'Logs\n'}
+
+                            {console.log('dashboard' + this.state.hits)}
+                            {console.log(this.state)}
+                            {this.state.phoneNumber ? <ActScr phoneNumber={this.state.phoneNumber} logsPerPage={30}/> : "No phone number"}
+                        </Grid.Column>
+                        <Grid.Column computer={4} tablet={4} mobile={16}>
+                            {'UserProfile />'}
+                        </Grid.Column>
+                    </Grid>
+                </Container>
+            </div>
         );
     };
 }
@@ -78,82 +110,12 @@ class Dashboard1 extends React.Component {
             <Container fluid>
                 <Grid columns={3}>
                     <Grid.Column computer={2} tablet={2} mobile={16}>
-                        <Menu attached fluid icon="labeled" vertical>
-                            <Menu.Item
-                                as={Link}
-                                to={`${url}/actions`}
-                                name="Actions Screen"
-                                active={location.pathname.includes(`/user/${userId}/actions`)}
-                                disabled={!userId}
-                            >
-                                <Icon name="tasks" />
-                                Действия
-                            </Menu.Item>
-
-                            <Menu.Item
-                                as={Link}
-                                to={`${url}/registration`}
-                                name="Registrations Screen"
-                                disabled={!phoneNumber || userId}
-                                active={location.pathname.includes(`/phone/${phoneNumber}/registration`)}
-                            >
-                                <Icon name="address card" />
-                                Регистрация
-                            </Menu.Item>
-
-                            <Menu.Item
-                                as={Link}
-                                to={`${url}/transactions`}
-                                name="Transactions Screen"
-                                active={location.pathname.includes(`/user/${parentID}/transactions`)}
-                                disabled={!parentID || !userId}
-                            >
-                                <Icon name="money bill alternate outline" />
-                                Транзакции
-                            </Menu.Item>
-
-                            <Menu.Item
-                                as={Link}
-                                to={`${url}/modifications`}
-                                name="Modifications Screen"
-                                active={location.pathname.includes(`/user/${parentID}/modifications`)}
-                                disabled={!parentID || !userId}
-                            >
-                                <Icon name="wrench" />
-                                Модификации
-                            </Menu.Item>
-                        </Menu>
                     </Grid.Column>
+
                     <Grid.Column computer={14} tablet={14} mobile={16}>
                         <Grid container columns={2} reversed="mobile vertically">
                             <Grid.Column computer={12} tablet={12} mobile={16}>
-                                <Switch>
-                                    <Route
-                                        path={`${path}/actions`}
-                                        component={ActionsScreen}
-                                    />
-                                    <Route path={`${path}/registration`} component={RegistrationsScreen} />
-                                    {children ? (
-                                        <Redirect
-                                            exact
-                                            from="/user/:userId/transactions"
-                                            to={`/user/${parentID}/transactions/${children[0].id}`}
-                                        />
-                                    ) : null}
-                                    <Route
-                                        path={`${path}/transactions`}
-                                        render={() => (
-                                            <TransactionsScreen parentID={parentID} childrenProfiles={children} />
-                                        )}
-                                    />
-                                    <Route
-                                        path={`${path}/modifications`}
-                                        render={() => (
-                                            <ModificationsScreen parentID={parentID} childrenProfiles={children} />
-                                        )}
-                                    />
-                                    <Redirect from="/user/:userId" to="/user/:userId/actions" />
-                                </Switch>
+
                             </Grid.Column>
 
                             <Grid.Column computer={4} tablet={4} mobile={16}>
