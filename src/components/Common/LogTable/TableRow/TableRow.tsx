@@ -7,7 +7,14 @@ interface IState {
     activeIndex: number;
 }
 
-class TableRow extends React.Component<Object, IState>{
+interface IProps {
+    time: Date;
+    result: any;
+    resolver: string;
+    type: string;
+}
+
+class TableRow extends React.Component<IProps, IState>{
     constructor(props: any) {
         super(props);
         this.state = {
@@ -23,15 +30,15 @@ class TableRow extends React.Component<Object, IState>{
         this.setState({ activeIndex: newIndex });
     };
 
-    renderResolver = (isError) => {
+    renderResolver = (isError: boolean) => {
         const { activeIndex } = this.state;
-        const { result, resolver, type } = this.props;
+        const { result, resolver } = this.props;
         const entries = result ? Object.entries(result) : null;
 
         const mappedEntries = entries
             ? entries.map((element: any, index: number) => (
                 <LogsListElement
-                    data={isError ? this.getErrorTranslation(entries[index][1]) : entries[index]}
+                    data={isError ? entries[index][1] : entries[index]}
                     key={index}
                 />
             ))
@@ -41,11 +48,10 @@ class TableRow extends React.Component<Object, IState>{
 
         if (entries) {
             listRender = typeof result === 'string' ? result : mappedEntries;
-        } else listRender = null;
+        } else listRender = 'empty listRender in Table Row';
 
         const LogItemTemplate = (
             <LogItemAccordion
-                type={type}
                 active={activeIndex === 0}
                 handleClick={this.handleClick}
                 name={resolver}
@@ -56,13 +62,16 @@ class TableRow extends React.Component<Object, IState>{
         return listRender && listRender.length ? LogItemTemplate : resolver;
     };
 
-    renderResult = (result, isError) => {
+    renderResult = (result: any, isError?: boolean) => {
         let res = '';
 
         if (result === undefined || result === null) return '';
         if (typeof result === 'object') {
             const keys = Object.keys(result);
-            if (isError) return this.getErrorTranslation(result[keys]);
+            if (isError) {
+                console.log(result[keys]);
+                return (result[keys]);
+            }
             keys.forEach(key => {
                 if (key.search(/id/i) === -1 && Number.isInteger(parseInt(result[key]))) {
                     res += result[key].toString().length > 2 ?
@@ -89,7 +98,7 @@ class TableRow extends React.Component<Object, IState>{
         return (
             <Table.Row error={type === 'error'}>
                 <Table.Cell>{new Date(time).toLocaleString()}</Table.Cell>
-                <Table.Cell width={6}>
+                <Table.Cell>
                     <Item>
                         <Item.Header>{this.renderResolver(type === 'error')}</Item.Header>
                         {activeIndex ? <Item.Description>{res}</Item.Description> : null}

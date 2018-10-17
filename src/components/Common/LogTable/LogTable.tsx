@@ -30,21 +30,17 @@ class LogTable extends React.Component<IProps> {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    <Table.Row>
-                        <Table.Cell>
-                            {logsData
-                                ? logsData.hits.map(log => (
-                                    <TableRow
-                                        key={log.id}
-                                        time={log.time}
-                                        resolver={log.resolver}
-                                        result={log.result}
-                                        type={log.type}
-                                    />
-                                ))
-                                : null}}
-                        </Table.Cell>
-                    </Table.Row>
+                    {logsData
+                        ? logsData.hits.map((log: any) => (
+                            <TableRow
+                                key={log.id}
+                                time={log.time}
+                                resolver={log.resolver}
+                                result={log.result}
+                                type={log.type}
+                            />
+                        ))
+                        : null}
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
@@ -64,18 +60,3 @@ class LogTable extends React.Component<IProps> {
 };
 
 export default LogTable;
-
-/*
-import Resolvers from '../Dictionaries/ResolversList';
-
-class LogTable extends PureComponent {
-    @autobind
-    getResolverValueByName(name) {
-        const resolver = Resolvers.find((it) => it.value === name);
-        return resolver ? resolver.text : 'Такого резолвера нет';
-    }
-}
-
-
-{
- */
