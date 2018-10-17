@@ -1,7 +1,4 @@
 import BaseApi from './BaseApi';
-import {Simulate} from "react-dom/test-utils";
-import submit = Simulate.submit;
-import axios from "axios";
 
 class UserLogsApi extends BaseApi {
     static async getLogs(request: string) {
