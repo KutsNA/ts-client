@@ -2,23 +2,15 @@ import * as React from 'react';
 import {Container, Grid, Menu, Icon,} from 'semantic-ui-react';
 import PhoneNumberSearch from '../Common/PhoneNumberSearch/PhoneNumberSearch';
 import SberKidsLogo from '../Common/SberKidsLogo/SberKidsLogo';
-//import ActionScreen from "../Screens/ActionScreen";
+import UserProfile from '../UserProfile/UserProfile';
 import ActScr from '../Screens/ActScr';
 
-/*
-import { changeCommon } from 'client/actions';
-import UserProfile from '../UserProfile';
-import PhoneNumberSearch from '../Common/PhoneNumberSearch';
-import ActionsScreen from '../Screens/Actions';
-import RegistrationsScreen from '../Screens/Registrations';
-import TransactionsScreen from '../Screens/Transactions';
-import ModificationsScreen from '../Screens/Modifications'
-*/
 interface IState {
     userId: string;
     phoneNumber: string;
     parameter: string;
     hits: any;
+    history: Array<string>;
 };
 
 class Dashboard extends React.Component<object, IState> {
@@ -29,6 +21,7 @@ class Dashboard extends React.Component<object, IState> {
             parameter: '',
             userId: '',
             hits: [],
+            history: [],
         };
     };
 
@@ -77,15 +70,10 @@ class Dashboard extends React.Component<object, IState> {
                             </Menu>
                         </Grid.Column>
                         <Grid.Column computer={12} tablet={12} mobile={16}>
-
-                            {'Logs\n'}
-
-                            {console.log('dashboard' + this.state.hits)}
-                            {console.log(this.state)}
                             {this.state.phoneNumber ? <ActScr phoneNumber={this.state.phoneNumber} logsPerPage={30}/> : "No phone number"}
                         </Grid.Column>
                         <Grid.Column computer={4} tablet={4} mobile={16}>
-                            {'UserProfile />'}
+                            <UserProfile phoneNumber={this.state.phoneNumber} history={this.state.history}/>
                         </Grid.Column>
                     </Grid>
                 </Container>
