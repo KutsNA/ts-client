@@ -1,14 +1,22 @@
 import axios from 'axios';
 
 class ValidationApi {
-    static async validateUser(login: string, password: string){
+    static async validateUser(login: string, password: string) {
         //create request to express route /login
-        return true;
+        if(login === 'admin' && password === '111'){
+            return true;
+        } else {
+            throw new Error('Login or password are incorrect!');
+        }
     };
 
-    static async validatePincode(pincode: string){
+    static async validatePincode(pincode: string) {
         //create request to express route /auth
-        return true;
+        if(pincode === '111111'){
+            return true;
+        } else {
+            throw new Error('Invalid pincode!');
+        };
     };
 }
 
