@@ -5,10 +5,10 @@ import MainPage from './components/MainPage/MainPage'
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import AuthPage from './components/AuthPage/AuthPage';
-import ValidationForm from './components/AuthPage/ValidationForm';
+import InputContainer from './components/AuthPage/InputContainer';
 
 ReactDOM.render(
-  <AuthPage/>,
+  <InputContainer/>,
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
