@@ -9,6 +9,7 @@ interface IState {
 }
 
 const isInteger = /^[0-9]*$/;
+const isPincode = /^[0-9]{6}$/;
 
 class ValidationForm extends React.Component<Object, IState> {
     constructor(props) {
@@ -21,8 +22,7 @@ class ValidationForm extends React.Component<Object, IState> {
 
     handleSubmit = () => {
         const { pincode } = this.state;
-        this.setState({submittedPincode: pincode});
-        this.validatePincode(this.state.submittedPincode);
+            this.validatePincode(pincode);
     };
 
     handleChange = ({target: {value: pincode}}) => {
@@ -45,6 +45,7 @@ class ValidationForm extends React.Component<Object, IState> {
 
     render() {
         const {pincode} = this.state;
+        const isDisabled = isPincode.test(pincode);
         return (
             <div className='pincode-form'>
                 <Container fluid={true}>
@@ -65,11 +66,14 @@ class ValidationForm extends React.Component<Object, IState> {
                                     <Segment stacked>
                                         <Form>
                                             <Form.Input
+                                                required
                                                 placeholder='pincode'
                                                 name='pincode'
                                                 value={pincode}
                                                 onChange={this.handleChange}/>
-                                            <Form.Button content='Enter pincode'/>
+                                            <Form.Button
+                                                disabled={!isDisabled}
+                                                content='Enter pincode'/>
                                         </Form>
                                     </Segment>
                                 </Form>

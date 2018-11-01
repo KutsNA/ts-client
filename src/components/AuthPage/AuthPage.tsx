@@ -1,3 +1,4 @@
+/*
 import * as React from 'react';
 import {Container, Grid, Header, Segment, Form, Modal} from 'semantic-ui-react';
 import SberKidsLogo from "../Common/SberKidsLogo/SberKidsLogo";
@@ -34,7 +35,7 @@ class AuthPage extends React.Component<Object, IState> {
 
     async validateUser(submittedLogin: string, submittedPassword: string) {
         this.setState({validUser: true});
-        <ValidationForm/>
+        //<ValidationForm/>
         // try{
         //     const userExist = await ValidationApi.validateUser(submittedLogin, submittedPassword);
         //     if (userExist) {
@@ -55,11 +56,11 @@ class AuthPage extends React.Component<Object, IState> {
                     <ValidationForm/> :
                     <Container fluid={true}>
                         <style>{`
-                     body > div,
-                     body > div > div,
-                     body > div > div > div.login-form {
-                     height: 100%;
-                     `}
+                            body > div,
+                            body > div > div,
+                            body > div > div > div.login-form {
+                            height: 100%;
+                            `}
                         </style>
                         <Grid textAlign='center' style={{height: '100%'}} verticalAlign='middle'>
                             <Grid.Column style={{maxWidth: 450}}>
@@ -78,14 +79,13 @@ class AuthPage extends React.Component<Object, IState> {
                                                     onChange={this.handleChange}/>
                                                 <Form.Input
                                                     required
+                                                    type={'password'}
                                                     placeholder='password'
                                                     name='password'
                                                     value={password}
                                                     onChange={this.handleChange}
                                                 />
-                                                <Modal trigger={<Form.Button content='Log in'/>}>
-                                                    <ValidationForm/>
-                                                </Modal>
+                                                <Form.Button content='Log in'/>
                                             </Form>
                                         </Segment>
                                     </Form>
@@ -98,4 +98,24 @@ class AuthPage extends React.Component<Object, IState> {
     };
 }
 
+export default AuthPage;*/
+
+import * as React from 'react';
+import InputContainer from './InputContainer';
+
+interface IState {
+    login: string;
+    password: string;
+    submittedLogin: string;
+    submittedPassword: string;
+    validUser: boolean;
+}
+
+class AuthPage extends React.Component<Object, IState> {
+    render(){
+      return(
+          <InputContainer constructor={} toString={} toLocaleString={} valueOf={} hasOwnProperty={} isPrototypeOf={} propertyIsEnumerable={}/>
+      );  
+    };
+};
 export default AuthPage;
